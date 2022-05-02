@@ -56,6 +56,10 @@ class NewsListFragment :
     }
 
     override fun initUserInterface(view: View?) {
+        if (activity?.hasInternetConnection() == false) {
+            viewDataBinding.root.showSnackBar(getString(R.string.error_internet_not_available))
+            return
+        }
         initRecyclerView()
         initObserverForStates()
     }

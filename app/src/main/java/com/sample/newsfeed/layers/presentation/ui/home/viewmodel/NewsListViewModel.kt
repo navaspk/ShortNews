@@ -15,7 +15,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * VM class responsible for making API call and getting response & update the UI using LiveData
+ * VM class responsible for making call to repository to get the data from data source.
+ * Same view model can be use for future to get different data from dat source as we implement using
+ * intention
  */
 @HiltViewModel
 class NewsListViewModel @Inject constructor(
@@ -47,12 +49,9 @@ class NewsListViewModel @Inject constructor(
     }
 
     private fun getPopularNews() {
-
         if (searchedNewsList == null) {
             searchedNewsList = repository.getNyArticleList(viewModelScope)
         }
-
-        //return searchedNewsList
     }
 
     // endregion

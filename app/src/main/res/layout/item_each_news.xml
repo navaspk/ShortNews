@@ -12,7 +12,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cardVewGradient"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="@dimen/dimen_0_dp"
             app:cardCornerRadius="@dimen/dimen_8_dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
@@ -26,7 +26,6 @@
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/news_image"
-                android:foreground="@drawable/background_gradient"
                 android:scaleType="centerCrop"
                 android:src="@drawable/background_gradient" />
         </androidx.cardview.widget.CardView>
@@ -34,12 +33,12 @@
         <TextView
             android:id="@+id/headingTextView"
             style="@style/TextViewStyle"
+            android:layout_marginBottom="@dimen/dimen_12_dp"
             android:fontFamily="@font/robotoslab_bold"
             android:gravity="center_horizontal"
             android:textSize="@dimen/font_size_3"
-            android:layout_marginBottom="@dimen/dimen_12_dp"
-            app:layout_constraintEnd_toEndOf="@id/cardVewGradient"
             app:layout_constraintBottom_toTopOf="@+id/newsSnippetTextView"
+            app:layout_constraintEnd_toEndOf="@id/cardVewGradient"
             app:layout_constraintStart_toStartOf="@+id/cardVewGradient"
             tools:text="It’s Life or Death’: The Mental Health Crisis Among U.S. Teens" />
 

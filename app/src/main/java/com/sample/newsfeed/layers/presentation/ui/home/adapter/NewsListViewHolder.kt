@@ -17,25 +17,44 @@ class NewsListViewHolder(
     event: (ClickEvent) -> Unit
 ) : BaseViewHolder<DocsItem>(event, recyclerBinding.root) {
 
+    // region VARIABLE
+
+    private val domain = "https://www.nytimes.com/"
+
+    // endregion
+
+
+    // region OVERRIDDEN
+
     override fun bindView(item: DocsItem) {
         loadNewsImage(item)
         showHeadingSnippetAndDate(item)
     }
 
+    // endregion
+
+
+    // region UTIL
+
     private fun loadNewsImage(item: DocsItem) {
         item.multimedia?.let { media ->
             if (media.isNotEmpty()) {
                 Glide.with(recyclerBinding.newsImages.context)
-                    .load("https://www.nytimes.com/${media[0]?.url}")
-                    .fitCenter()
+                    .load("$domain${media[0]?.url}")
+                    .centerCrop()
                     .error(R.drawable.background_gradient)
                     .placeholder(R.drawable.background_gradient)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(recyclerBinding.newsImages)
             } else {
-                recyclerBinding.newsImages.setImageResource(R.drawable.background_gradient)
+                setDefaultImage()
             }
-        }
+        } ?: setDefaultImage()
+
+    }
+
+    private fun setDefaultImage() {
+        recyclerBinding.newsImages.setImageResource(R.drawable.background_gradient)
     }
 
     private fun showHeadingSnippetAndDate(item: DocsItem) {
@@ -45,4 +64,7 @@ class NewsListViewHolder(
             dateTextView.text = item.pubDate?.substring(0, 10)
         }
     }
+
+    // endregion
+
 }
