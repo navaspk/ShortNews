@@ -1,0 +1,14 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="TextViewStyle">
+        <item name="android:maxLines">2</item>
+        <item name="android:elevation">@dimen/dimen_8_dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:paddingStart">@dimen/dimen_12_dp</item>
+        <item name="android:paddingEnd">@dimen/dimen_12_dp</item>
+    </style>
+
+</resources>
