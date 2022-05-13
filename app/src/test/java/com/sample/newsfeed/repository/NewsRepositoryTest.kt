@@ -1,5 +1,7 @@
 package com.sample.newsfeed.repository
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.google.common.truth.Truth
 import com.sample.newsfeed.layers.domain.api.NewsServiceApi
 import com.sample.newsfeed.layers.usecase.NewsSearchListUseCase
 import com.sample.newsfeed.layers.data.repository.NewsRepository
@@ -8,12 +10,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 import org.mockito.Mockito.*
 
-@RunWith(JUnit4::class)
+//@RunWith(JUnit4::class)
 class NewsRepositoryTest {
 
     private lateinit var repository: NewsRepository
@@ -21,6 +22,9 @@ class NewsRepositoryTest {
     private val remoteDataSource = NewsSearchListUseCase(service)
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
+
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Before
     fun init() {
@@ -30,9 +34,8 @@ class NewsRepositoryTest {
     @Test
     fun loadNewsFromNetwork() {
         runBlocking {
-            repository.getNyArticleList(coroutineScope = coroutineScope)
-
-            verifyZeroInteractions(repository)
+            val data = repository.getNyArticleList(coroutineScope = coroutineScope)
+            Truth.assertThat(data).isNotNull()
         }
     }
 }

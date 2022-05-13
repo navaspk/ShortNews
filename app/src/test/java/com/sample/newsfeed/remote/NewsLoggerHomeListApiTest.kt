@@ -3,6 +3,7 @@ package com.sample.newsfeed.remote
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertWithMessage
 import com.sample.newsfeed.layers.domain.api.NewsServiceApi
 import com.sample.core.supporter.GsonProvider
 import com.sample.newsfeed.MockResponseFileReader
@@ -54,7 +55,7 @@ class NewsLoggerHomeListApiTest {
             .setBody(MockResponseFileReader("articlesearch.json").content)
 
         mockWebServer.enqueue(response)
-        runBlocking(coroutineTestRule.testDispatcher) {
+        runBlocking {
             val articleListResponse: Response<ItemsResponse> = newsService.fetchArticles()
             Truth.assertThat(articleListResponse.isSuccessful).isTrue()
         }
@@ -67,9 +68,10 @@ class NewsLoggerHomeListApiTest {
             .setBody(MockResponseFileReader("articlesearch.json").content)
 
         mockWebServer.enqueue(response)
-        runBlocking(coroutineTestRule.testDispatcher) {
+        runBlocking {
             val articleListResponse: Response<ItemsResponse> = newsService.fetchArticles()
-            Truth.assertThat(articleListResponse.body()).isEqualTo(5)
+            Truth.assertWithMessage("Without me, it's just awesome")
+                .that(articleListResponse.body()?.response?.docs?.size).isEqualTo(10)
         }
     }
 
@@ -77,11 +79,14 @@ class NewsLoggerHomeListApiTest {
     fun requestNews() {
         runBlocking {
             enqueueResponse("articlesearch.json")
-            val resultResponse = newsService.fetchArticles().body()
+            val resultResponse = newsService.fetchArticles().body()?.response
 
             val request = mockWebServer.takeRequest()
             Assert.assertNotNull(resultResponse)
-            Assert.assertThat(request.path, CoreMatchers.`is`("/svc/search/v2/articlesearch.json"))
+
+            assertWithMessage("There is an error").that(request.path).contains("/svc/search/v2/articlesearch.json");
+
+            //Assert.assertThat(request.path, CoreMatchers.`is`("/svc/search/v2/articlesearch.json"))
         }
     }
 
@@ -99,14 +104,16 @@ class NewsLoggerHomeListApiTest {
 
     private fun enqueueResponse(fileName: String, headers: Map<String, String> = emptyMap()) {
         val inputStream = javaClass.classLoader
-            ?.getResourceAsStream("/svc/search/v2/$fileName")
+            ?.getResourceAsStream("$fileName")
         val source = Okio.buffer(Okio.source(inputStream))
         val mockResponse = MockResponse()
         for ((key, value) in headers) {
             mockResponse.addHeader(key, value)
         }
-        mockWebServer.enqueue(mockResponse.setBody(
-            source.readString(Charsets.UTF_8))
+        mockWebServer.enqueue(
+            mockResponse.setBody(
+                source.readString(Charsets.UTF_8)
+            )
         )
     }
 }

@@ -7,7 +7,7 @@ import com.google.android.material.snackbar.Snackbar
 
 /**
  * Utility file for performing all utility generic operation with extension function which belongs
- * to specific object. All the methods defined here can access from through out the project
+ * to specific object.
  */
 fun View.showSnackBar(str: String) {
     Snackbar.make(
